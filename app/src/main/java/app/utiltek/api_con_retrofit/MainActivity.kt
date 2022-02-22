@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity(),SearchView.OnQueryTextListener {
     private fun getRetrofit(): Retrofit {
         return Retrofit.Builder()
             .baseUrl("https://dog.ceo/api/breed/")
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create())//conversor de json a objeto como tal
             .build()
     }
 
@@ -54,7 +54,7 @@ class MainActivity : AppCompatActivity(),SearchView.OnQueryTextListener {
             var call = getRetrofit().create(APIService::class.java)
                 .getDogsByBreeds("$raza/images")//tengo una lista  de una raza en especial
             var cachorros = call.body()//aquí tengo el objeto como tal de la raza buscada, una lista con una raza determinada
-            //todo lo que se ejecute aqui se muestra en el hilo principal de la app
+            //todo lo que se ejecute aqui se muestra en el hilo principal de la app:
             runOnUiThread {
                 if (call.isSuccessful) {
                     //añadiendo imagenes al recycler:
