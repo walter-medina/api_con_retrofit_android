@@ -13,11 +13,12 @@ import kotlinx.coroutines.launch
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class MainActivity : AppCompatActivity(),SearchView.OnQueryTextListener {
+class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
     private lateinit var binding: ActivityMainBinding// para llamar a los componentes de la vista más facil
     private lateinit var adapter: DogAdapter
-    private val dogImages =mutableListOf<String>()//cada que se hace una busqueda se pinta una imagen diferente en el recycler,por lo tanto la lista debe cambiar, mutable
+    private val dogImages =
+        mutableListOf<String>()//cada que se hace una busqueda se pinta una imagen diferente en el recycler,por lo tanto la lista debe cambiar, mutable
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,12 +54,14 @@ class MainActivity : AppCompatActivity(),SearchView.OnQueryTextListener {
         CoroutineScope(Dispatchers.IO).launch {
             var call = getRetrofit().create(APIService::class.java)
                 .getDogsByBreeds("$raza/images")//tengo una lista  de una raza en especial
-            var cachorros = call.body()//aquí tengo el objeto como tal de la raza buscada, una lista con una raza determinada
+            var cachorros =
+                call.body()//aquí tengo el objeto como tal de la raza buscada, una lista con una raza determinada
             //todo lo que se ejecute aqui se muestra en el hilo principal de la app:
             runOnUiThread {
                 if (call.isSuccessful) {
                     //añadiendo imagenes al recycler:
-                    val images=cachorros?.images ?: emptyList()//aquí si tengo la url de las razas buscadas, verifico que no esté vacia y no de null
+                    val images = cachorros?.images
+                        ?: emptyList()//aquí si tengo la url de las razas buscadas, verifico que no esté vacia y no de null
                     dogImages.clear()//limpio la lista por si las moscas
                     dogImages.addAll(images)//adiciono las imagenes de determinada raza a la lista, segun busqueda
                     adapter.notifyDataSetChanged()//avisar que hubieron cambios
@@ -75,6 +78,7 @@ class MainActivity : AppCompatActivity(),SearchView.OnQueryTextListener {
         }
 
     }
+
     //para ocultar el teclado
     private fun hideKeyBoard() {
         val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
@@ -83,12 +87,12 @@ class MainActivity : AppCompatActivity(),SearchView.OnQueryTextListener {
     }
 
     private fun showError() {
-        Toast.makeText(this, "No se encontró la raza",Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "No se encontró la raza", Toast.LENGTH_SHORT).show()
     }
 
     //cuando se le da clic en buscar se ejetuta este metodo
     override fun onQueryTextSubmit(query: String?): Boolean {
-        if (!query.isNullOrEmpty()){
+        if (!query.isNullOrEmpty()) {
             searchByName(query.toLowerCase())
 
         }
